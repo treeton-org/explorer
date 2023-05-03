@@ -8,6 +8,7 @@ on:
 
 env:
   HOST: explorer.treeton.org
+  PORT: 43722
 
 jobs:
   deploy:
@@ -20,7 +21,7 @@ jobs:
         uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ env.HOST }}
-          port: 22
+          port: ${{ env.PORT }}
           username: root
           key: ${{ secrets.SSH_DEPLOY_PRIVATE_KEY }}
           source: docker,docker-compose.yaml,.env.prod,public
@@ -36,6 +37,6 @@ jobs:
             docker compose --env-file .env.prod down
             docker compose --env-file .env.prod up -d
           host: ${{ env.HOST }}
-          port: 22
+          port: ${{ env.PORT }}
           username: root
           key: ${{ secrets.SSH_DEPLOY_PRIVATE_KEY }}
