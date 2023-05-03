@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  nginx:
+    image: nginx:1.23.4
+    container_name: nginx
+    restart: always
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./public:/www/data:ro
+      - nginx-explorer-log:/var/log/nginx
+    labels:
+      - traefik.enable=true
+
+      - traefik.http.routers.nginxExplorer.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.nginxExplorer.service=nginxExplorer
+      - traefik.http.routers.nginxExplorer.entryPoints=http
+
+      - traefik.http.routers.nginxExplorerHttps.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.nginxExplorerHttps.service=nginxExplorer
+      - traefik.http.routers.nginxExplorerHttps.entryPoints=https
+      - traefik.http.routers.nginxExplorerHttps.tls.certResolver=letsEncrypt
+
+      - traefik.http.services.nginxExplorer.loadbalancer.server.port=80
+
+networks:
+  traefik:
+    external: true
+    name: traefik
+
+volumes:
+  nginx-explorer-log:
