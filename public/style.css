@@ -54,7 +54,8 @@ input {
 
 
 .TopBar__leftPart > div > a:first-child,
-.TopBar__leftPart > div > div:nth-child(2) {
+.TopBar__leftPart > div > div:nth-child(2),
+.TopBar__leftPart > div > .icon {
     display: none;
 }
 
